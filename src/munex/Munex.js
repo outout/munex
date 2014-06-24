@@ -83,6 +83,11 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
 
             };
 
+
+            /**
+             * ----------------------------------------------------------
+             * ----------------------------------------------------------
+             */
             this.redrawExistingData = function() {
                 var self = this;
                 this.clearAllLayers();
@@ -176,13 +181,9 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
 
                 var self = this;
                 var point = self.engineNodes.getPointOnCircle(center, radius, nodeAngle);
-
                 var groupName = groupData.name;
 
-
-                this.NODES_INDEX[groupName][node.id] = {};
-                this.NODES_INDEX[groupName][node.id].center = point;
-
+                this.indexProperty(groupName, node.id, 'center', point);
 
                 _.each(node.parent, function(parentId) {
 
@@ -192,6 +193,28 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
 
                 self.drawNode(point, self.nodeRadius, 1, layerData.color, '#515151');
 
+
+            };
+
+            /**
+             *
+             * @param groupName
+             * @param nodeId
+             * @param propertyName
+             * @param value
+             */
+            this.indexProperty = function(groupName, nodeId, propertyName, value) {
+
+                 if(typeof this.NODES_INDEX[groupName][nodeId] === 'undefined') {
+
+                     this.NODES_INDEX[groupName][nodeId] = {};
+                     this.NODES_INDEX[groupName][nodeId][propertyName] = value;
+
+                 } else {
+
+                     this.NODES_INDEX[groupName][nodeId][propertyName] = value;
+
+                 }
 
             };
 
