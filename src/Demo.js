@@ -61,48 +61,48 @@ define(['munex/Munex', 'munex/MunexConsole', 'datGui'],
 
                     });
 
-                this.munex.addGroupData( {
-                                        name : 'Group B',
-                                        nodes: [
-                                            [
-                                                {id: 'a', name: 'a', parent: []}
+                this.munex.addGroupData(
+                    {
+                        name : 'Group B',
+                        nodes: [
+                            [
+                                {id: 'a', name: 'a', parent: []}
 
-                                            ],
-                                            [
+                            ],
+                            [
 
-                                                {id: 'a1', name: 'A1', parent: ['a']},
-                                                {id: 'b1', name: 'B1', parent: ['a']},
-                                                {id: 'c1', name: 'C1', parent: ['a']},
-                                                {id: 'd1', name: 'D1', parent: ['a']},
-                                                {id: 'e1', name: 'E1', parent: ['a']}
-                                            ],
-                                            [
-                                                {id: 'a22', name: 'A1', parent: ['a1']},
-                                                {id: 'b22', name: 'A1', parent: ['a1']},
-                                                {id: 'd22', name: 'A1', parent: ['a1']},
-                                                {id: 'e22', name: 'A1', parent: ['b1']},
-                                                {id: 'h22', name: 'A1', parent: ['b1']},
-                                                {id: 'i22', name: 'A1', parent: ['c1']},
-                                                {id: 'l22', name: 'A1', parent: ['c1']},
-                                                {id: 'm22', name: 'A1', parent: ['d1']},
-                                                {id: 'o22', name: 'A1', parent: ['d1']},
-                                                {id: 'p22', name: 'A1', parent: ['e1']},
-                                                {id: 'r22', name: 'A1', parent: ['e1']}
+                                {id: 'a1', name: 'A1', parent: ['a']},
+                                {id: 'b1', name: 'B1', parent: ['a']},
+                                {id: 'c1', name: 'C1', parent: ['a']},
+                                {id: 'd1', name: 'D1', parent: ['a']},
+                                {id: 'e1', name: 'E1', parent: ['a']}
+                            ],
+                            [
+                                {id: 'a22', name: 'A1', parent: ['a1']},
+                                {id: 'b22', name: 'A1', parent: ['a1']},
+                                {id: 'd22', name: 'A1', parent: ['a1']},
+                                {id: 'e22', name: 'A1', parent: ['b1']},
+                                {id: 'h22', name: 'A1', parent: ['b1']},
+                                {id: 'i22', name: 'A1', parent: ['c1']},
+                                {id: 'l22', name: 'A1', parent: ['c1']},
+                                {id: 'm22', name: 'A1', parent: ['d1']},
+                                {id: 'o22', name: 'A1', parent: ['d1']},
+                                {id: 'p22', name: 'A1', parent: ['e1']},
+                                {id: 'r22', name: 'A1', parent: ['e1']}
 
-                                            ]
-                                        ]
+                            ]
+                        ]
 
-                                    });
+                    });
 
                 this.munex.addGroupData({
-                    name : 'Group B',
+                    name : 'Group C',
                     nodes: [
                         [],
                         [],
                         []
                     ]
                 });
-
 
 
                 this.munex.init(selectors);
