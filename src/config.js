@@ -1,9 +1,10 @@
 requirejs.config({
-    baseUrl: 'src',
+    baseUrl: '/src/',
     paths  : {
         jquery    : '../lib/jq.min',
         backbone  : '../lib/backbone.min',
-        underscore: '../lib/underscore.min'
+        underscore: '../lib/underscore.min',
+        datGui    : '../lib/datgui.min'
     },
 
 
@@ -11,9 +12,13 @@ requirejs.config({
         exports: '_'
     },
 
-    backbone  : {
+    backbone: {
         deps   : ['jquery', 'underscore'],
         exports: 'Backbone'
+    },
+
+    datGui: {
+        exports: 'dat'
     }
 
 });

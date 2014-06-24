@@ -692,6 +692,68 @@ define(["jquery"], function($) {
 
         };
 
+
+        /**
+         *
+         * @param {object} center
+         * @param {Number} center.x
+         * @param {Number} center.y
+         * @param {Number} radius
+         * @param {Number} startAngle
+         * @param {Number} endAngle
+         * @param {Number} lineWidth
+         * @param {String} color
+         */
+        this.arcStroke = function(center, radius, startAngle, endAngle, lineWidth, color) {
+
+            this.ctx.beginPath();
+            this.ctx.arc(center.x, center.y, radius, this._degToRad(startAngle), this._degToRad(endAngle), false);
+            this.ctx.lineWidth = lineWidth;
+            this.ctx.strokeStyle = color;
+
+
+
+            this.ctx.stroke();
+
+        };
+
+
+        this.arcFill = function(center, radius, startAngle, endAngle, lineWidth, color) {
+
+            this.ctx.beginPath();
+            this.ctx.arc(center.x, center.y, radius, this._degToRad(startAngle), this._degToRad(endAngle), false);
+            this.ctx.lineWidth = lineWidth;
+            this.ctx.fillStyle = color;
+
+
+
+            this.ctx.fill();
+
+        };
+
+        this.arcFillAndStroke = function(center, radius, startAngle, endAngle, lineWidth, color, borderColor) {
+
+            this.ctx.beginPath();
+            this.ctx.arc(center.x, center.y, radius, this._degToRad(startAngle), this._degToRad(endAngle), false);
+            this.ctx.lineWidth = lineWidth;
+            this.ctx.fillStyle = color;
+            this.ctx.strokeStyle = borderColor;
+
+            this.ctx.fill();
+            this.ctx.stroke();
+
+        };
+
+
+
+        this.getPointOnCircle = function(center, radius, angle) {
+
+            return {
+                x : (center.x + radius * Math.cos(this._degToRad(angle))),
+                y : (center.y + radius * Math.sin(this._degToRad(angle)))
+            }
+        };
+
         /**
          * ----------------------------------------------------------
          * ----------------------------------------------------------

@@ -1,0 +1,43 @@
+<html>
+<head>
+
+    <title>Munex Demo</title>
+
+
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,700,600|Source+Code+Pro:400,700"
+          rel="stylesheet">
+    <link href="/resources/demo.css" rel="stylesheet">
+
+
+    <script src="/lib/hi-dpi-canvas.min.js"></script>
+    <script src="/lib/require.js"></script>
+
+    <script src="/src/config.js"></script>
+    <script>
+
+        require(['Demo'], function(Demo) {
+            Demo.init({
+                background: 'munexDemo_background',
+                edges:  'munexDemo_edges',
+                nodes: 'munexDemo_nodes'
+            });
+
+        });
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <h2>MuNEX demo</h2>
+
+    <input id="MunexConsoleInput" value="" class="munexConsoleInput" type="text"/>
+
+    <div style="margin: 6px 0 0 0;position: relative; width: 900px; height: 750px;">
+        <canvas id="munexDemo_nodes" width="900" height="750"  style="position: absolute; z-index: 2;"></canvas>
+        <canvas id="munexDemo_edges" width="900" height="750"  style="position: absolute; z-index: 1;"></canvas>
+        <canvas id="munexDemo_background" width="900" height="750" class="munexMain" style="position: absolute; z-index: 0;"></canvas>
+    </div>
+</div>
+
+</body>
+</html>
