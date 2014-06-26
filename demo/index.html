@@ -19,6 +19,7 @@
             Demo.init({
                 background: 'munexDemo_background',
                 edges:  'munexDemo_edges',
+                connections:  'munexDemo_connections',
                 nodes: 'munexDemo_nodes'
             });
 
@@ -33,8 +34,9 @@
     <input id="MunexConsoleInput" value="" class="munexConsoleInput" type="text"/>
 
     <div style="margin: 6px 0 0 0;position: relative; width: 900px; height: 750px;">
-        <canvas id="munexDemo_nodes" width="900" height="750"  style="position: absolute; z-index: 2;"></canvas>
-        <canvas id="munexDemo_edges" width="900" height="750"  style="position: absolute; z-index: 1;"></canvas>
+        <canvas id="munexDemo_nodes" width="900" height="750"  style="position: absolute; z-index: 3;"></canvas>
+        <canvas id="munexDemo_edges" width="900" height="750"  style="position: absolute; z-index: 2;"></canvas>
+        <canvas id="munexDemo_connections" width="900" height="750" class="" style="position: absolute; z-index: 1;"></canvas>
         <canvas id="munexDemo_background" width="900" height="750" class="munexMain" style="position: absolute; z-index: 0;"></canvas>
     </div>
 </div>

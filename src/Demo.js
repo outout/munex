@@ -20,6 +20,10 @@ define(['munex/Munex', 'munex/MunexConsole', 'datGui'],
                 this.munex.addLayer('Layer 2', '#ffcc00');
                 this.munex.addLayer('Layer 3', '#ff0000');
 
+                this.munex.hideConnectionForLayer('Layer 1');
+                this.munex.hideConnectionForLayer('Layer 2');
+
+                this.munex.init(selectors);
                 this.munex.addGroupData(
                     {
                         name : 'Group A',
@@ -78,11 +82,11 @@ define(['munex/Munex', 'munex/MunexConsole', 'datGui'],
                                 {id: 'e1', name: 'E1', parent: ['a']}
                             ],
                             [
-                                {id: 'a22', name: 'A1', parent: ['a1']},
-                                {id: 'b22', name: 'A1', parent: ['a1']},
-                                {id: 'd22', name: 'A1', parent: ['a1']},
-                                {id: 'e22', name: 'A1', parent: ['b1']},
-                                {id: 'h22', name: 'A1', parent: ['b1']},
+                                {id: 'a2', name: 'A1', parent: ['a1']},
+                                {id: 'b2', name: 'A1', parent: ['a1']},
+                                {id: 'd2', name: 'A1', parent: ['a1']},
+                                {id: 'e2', name: 'A1', parent: ['b1']},
+                                {id: 'h2', name: 'A1', parent: ['b1']},
                                 {id: 'i22', name: 'A1', parent: ['c1']},
                                 {id: 'l22', name: 'A1', parent: ['c1']},
                                 {id: 'm22', name: 'A1', parent: ['d1']},
@@ -98,25 +102,50 @@ define(['munex/Munex', 'munex/MunexConsole', 'datGui'],
                 this.munex.addGroupData({
                     name : 'Group C',
                     nodes: [
-                        [],
-                        [],
-                        []
+                        [
+                            {id: '3b', name: 'a', parent: []},
+                            {id: '3a', name: 'a', parent: []}
+
+                        ],
+                        [
+
+                            {id: '3a1', name: 'A1', parent: ['3a']},
+                            {id: '3b1', name: 'B1', parent: ['3a', '3b']},
+                            {id: 'd1', name: 'D1', parent: ['3a']},
+                            {id: '3e1', name: 'E1', parent: ['3a']}
+                        ],
+                        [
+                            {id: 'a2', name: 'A1', parent: ['3a1']},
+                            {id: 'b2', name: 'A1', parent: ['3a1']},
+                            {id: 'd23', name: 'A1', parent: ['3a1']},
+                            {id: 'm23', name: 'A1', parent: ['d1']},
+                            {id: 'o23', name: 'A1', parent: ['d1']},
+                            {id: 'p23', name: 'A1', parent: ['3e1']},
+                            {id: 'r23', name: 'A1', parent: ['3e1']}
+
+                        ]
                     ]
+
                 });
 
-
-                this.munex.init(selectors);
 
                 var gui = new dat.GUI();
 
 
-                var radiusController = gui.add(this.munex, 'radius', 10, 220);
+                var radiusController = gui.add(this.munex, 'radius', 10, 320);
                 var layerGapController = gui.add(this.munex, 'layerGap', 5, 100);
                 var nodeRadiusController = gui.add(this.munex, 'nodeRadius', 1, 20);
                 var rotationOffsetController = gui.add(this.munex, 'rotationOffset', 1, 360);
                 var edgeWidthController = gui.add(this.munex, 'edgeWidth', 1, 10);
                 var edgeColorController = gui.addColor(this.munex, 'edgeColor');
-                var groupCircleColorController = gui.addColor(this.munex, 'groupCircleColor');
+                var groupCircleOpacityController = gui.add(this.munex, 'groupCircleOpacity', 0, 1);
+                var cwController = gui.add(this.munex, 'connectionWidth', 1, 10);
+                var coController = gui.add(this.munex, 'connectionOpacity', 0, 1);
+                var gcwController = gui.add(this.munex, 'groupCircleWidth', 1, 50);
+                var sepDegrees = gui.add(this.munex, 'separationDegrees', 0.5, 35).step(0.5);
+                var drawNodesController = gui.add(this.munex, 'drawNodes');
+                var drawEdgesController = gui.add(this.munex, 'drawEdges');
+                var drawConnectionsController = gui.add(this.munex, 'drawConnections');
 
                 radiusController.onChange(function() {
                     self.munex.redrawExistingData();
@@ -136,10 +165,38 @@ define(['munex/Munex', 'munex/MunexConsole', 'datGui'],
                 edgeWidthController.onChange(function() {
                     self.munex.redrawExistingData();
                 });
-                groupCircleColorController.onChange(function() {
+                groupCircleOpacityController.onChange(function() {
                     self.munex.redrawExistingData();
                 });
 
+                cwController.onChange(function() {
+                    self.munex.redrawExistingData();
+                });
+
+                coController.onChange(function() {
+                    self.munex.redrawExistingData();
+                });
+
+                gcwController.onChange(function() {
+                    self.munex.redrawExistingData();
+                });
+
+                drawNodesController.onChange(function() {
+                    self.munex.redrawExistingData();
+
+                });
+
+                sepDegrees.onChange(function() {
+                    self.munex.redrawExistingData();
+                });
+
+                drawEdgesController.onChange(function() {
+                    self.munex.redrawExistingData();
+                });
+
+                drawConnectionsController.onChange(function() {
+                    self.munex.redrawExistingData();
+                });
 
             }
         }

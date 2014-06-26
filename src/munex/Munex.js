@@ -19,14 +19,26 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
             this.layerGap = 80;
             this.nodeRadius = 5;
             this.rotationOffset = 20;
-            this.edgeColor = '#ddddff';
+            this.edgeColor = '#d1d1d1';
             this.edgeWidth = 1;
             this.groupCircleColor = '#d9d9d9';
+            this.groupCircleOpacity = 0.4;
+            this.groupCircleWidth = 4;
+            this.groupAdding = false;
+            this.connectionWidth = 1;
+            this.connectionOpacity = 0.5;
+            this.separationDegrees = 4;
 
+            this.drawNodes = true;
+            this.drawEdges = true;
+            this.drawConnections = true;
+
+            this.HIDDEN_CONNECTIONS = [];
 
             this.GROUPS = [];
             this.LAYERS = [];
             this.NODES_INDEX = {};
+            this.CONNECTION_IDEX = {};
 
             /**
              * ----------------------------------------------------------
@@ -38,14 +50,16 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
                 this.canvasElementBackground = $('#' + selectors.background);
                 this.canvasElementNodes = $('#' + selectors.nodes);
                 this.canvasElementEdges = $('#' + selectors.edges);
+                this.canvasElementConnections = $('#' + selectors.connections);
 
                 this.engineBackground = new CanvasLib(this.canvasElementBackground);
                 this.engineNodes = new CanvasLib(this.canvasElementNodes);
                 this.engineEdges = new CanvasLib(this.canvasElementEdges);
+                this.engineConnections = new CanvasLib(this.canvasElementConnections);
 
                 this.channel = Channel;
 
-                this.drawData();
+
                 this.registerApiEvents();
 
             };
@@ -72,6 +86,9 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
 
                 this.clearAllLayers();
 
+                this.CONNECTION_IDEX = {};
+                this.NODES_INDEX = {};
+
                 this.groupCount = this.getGroupCount();
                 this.startAngle = 0;
                 this.groupRadius = 360 / this.groupCount;
@@ -79,8 +96,56 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
 
                 _.each(this.GROUPS, function(group) {
                     self.drawGroup(group);
+
                 });
 
+
+                self.drawConnectionLines();
+
+            };
+
+
+            /**
+             * ----------------------------------------------------------
+             * ----------------------------------------------------------
+             */
+            this.drawConnectionLines = function() {
+                if (this.drawConnections === true) {
+                    var self = this;
+                    var center = this.getCanvasCenter();
+
+                    _.each(this.CONNECTION_IDEX, function(nodes, key) {
+
+                        if (nodes.length > 1) {
+
+                            var connections = [];
+
+                            _.each(nodes, function(node, index) {
+                                _.each(nodes, function(nextNode) {
+
+                                    var combinedId = node.id + '-' + nextNode.id;
+                                    var reversedCombiedId = nextNode.id + '-' + node.id;
+
+                                    if (_.indexOf(self.HIDDEN_CONNECTIONS, node.layer.name) === -1) {
+
+                                        if (node.id !== nextNode.id && _.indexOf(connections, combinedId) === -1 && _.indexOf(connections, reversedCombiedId) === -1) {
+
+                                            self.engineConnections.ctx.strokeStyle = self.engineConnections.preCalculateColor(node.layer.color, self.connectionOpacity);
+                                            self.engineConnections.ctx.lineWidth = self.connectionWidth;
+                                            self.engineConnections.ctx.beginPath();
+                                            self.engineConnections.ctx.moveTo(node.position.x, node.position.y);
+                                            self.engineConnections.ctx.quadraticCurveTo(center.x, center.y, nextNode.position.x, nextNode.position.y);
+                                            self.engineConnections.ctx.stroke();
+
+                                            connections.push(combinedId);
+
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    });
+                }
             };
 
 
@@ -91,9 +156,15 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
             this.redrawExistingData = function() {
                 var self = this;
                 this.clearAllLayers();
+
+                this.CONNECTION_IDEX = {};
+                this.NODES_INDEX = {};
+
                 _.each(this.GROUPS, function(group) {
                     self.drawGroup(group);
                 });
+
+                self.drawConnectionLines();
 
             };
 
@@ -106,6 +177,7 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
                 this.engineBackground.clearAll();
                 this.engineEdges.clearAll();
                 this.engineNodes.clearAll();
+                this.engineConnections.clearAll();
 
             };
 
@@ -136,23 +208,27 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
                 var self = this;
 
                 var center = this.getCanvasCenter();
-                var startAngle = this.startAngle + 2 - this.rotationOffset;
-                var endAngle = this.startAngle + this.groupRadius - 2 - this.rotationOffset;
+                var startAngle = this.startAngle + this.separationDegrees - this.rotationOffset;
+                var endAngle = this.startAngle + this.groupRadius - this.separationDegrees - this.rotationOffset;
                 var centerAngle = startAngle + (endAngle - startAngle) / 2;
 
                 self.NODES_INDEX[groupData.name] = {};
 
+
+
                 _.each(groupData.nodes, function(layerNodes, index) {
 
                     var radius = self.radius + ((groupData.nodes.length * self.layerGap) - ((index + 1) * self.layerGap));
-                    self.engineBackground.arcStroke(center, radius, startAngle, endAngle, 1, self.groupCircleColor);
 
                     var nodesInLayer = layerNodes.length;
-                    var layerAngleStep = (self.groupRadius - 4 ) / (nodesInLayer);
+                    var layerAngleStep = (self.groupRadius - (self.separationDegrees * 2) ) / (nodesInLayer);
                     var correction = (centerAngle - startAngle) / nodesInLayer;
                     var nodeAngle = startAngle + correction;
                     var layerName = self.LAYERS[index].name;
                     var layerData = self.getLayerData(layerName);
+
+                    var layerCircleColor = self.engineBackground.preCalculateColor(layerData.color, self.groupCircleOpacity);
+                    self.engineBackground.arcStroke(center, radius, startAngle, endAngle, self.groupCircleWidth, layerCircleColor);
 
 
                     _.each(layerNodes, function(node) {
@@ -171,7 +247,7 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
              * ----------------------------------------------------------
              * ----------------------------------------------------------
              * @param node
-             * @param startNodeAngle
+             * @param nodeAngle
              * @param center
              * @param radius
              * @param layerData
@@ -185,14 +261,19 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
 
                 this.indexProperty(groupName, node.id, 'center', point);
 
-                _.each(node.parent, function(parentId) {
+                this.indexConnection(node.id, {id: node.id + '-' + groupName, group: groupData, layer: layerData, position: point});
 
-                    self.drawEdge(point, self.NODES_INDEX[groupName][parentId].center, self.edgeWidth, self.edgeColor);
+                if (this.drawEdges === true) {
+                    _.each(node.parent, function(parentId) {
 
-                });
+                        self.drawEdge(point, self.NODES_INDEX[groupName][parentId].center, self.edgeWidth, self.edgeColor);
 
-                self.drawNode(point, self.nodeRadius, 1, layerData.color, '#515151');
+                    });
+                }
 
+                if(this.drawNodes === true)  {
+                    self.drawNode(point, self.nodeRadius, 1, layerData.color, '#515151');
+                }
 
             };
 
@@ -205,16 +286,61 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
              */
             this.indexProperty = function(groupName, nodeId, propertyName, value) {
 
-                 if(typeof this.NODES_INDEX[groupName][nodeId] === 'undefined') {
+                if (typeof this.NODES_INDEX[groupName][nodeId] === 'undefined') {
 
-                     this.NODES_INDEX[groupName][nodeId] = {};
-                     this.NODES_INDEX[groupName][nodeId][propertyName] = value;
+                    this.NODES_INDEX[groupName][nodeId] = {};
+                    this.NODES_INDEX[groupName][nodeId][propertyName] = value;
 
-                 } else {
+                } else {
 
-                     this.NODES_INDEX[groupName][nodeId][propertyName] = value;
+                    this.NODES_INDEX[groupName][nodeId][propertyName] = value;
 
-                 }
+                }
+
+            };
+
+            /**
+             * ----------------------------------------------------------
+             * ----------------------------------------------------------
+             * @param {String} layerName
+             */
+            this.hideConnectionForLayer = function(layerName) {
+
+                this.HIDDEN_CONNECTIONS.push(layerName);
+            };
+
+
+            /**
+             * ----------------------------------------------------------
+             * ----------------------------------------------------------
+             * @param {String} layerName
+             */
+            this.showConnectionForLayer = function(layerName) {
+
+                this.HIDDEN_CONNECTIONS = _.without(this.HIDDEN_CONNECTIONS, layerName);
+
+            };
+
+
+            /**
+             * ----------------------------------------------------------
+             * ----------------------------------------------------------
+             * @param {String} nodeId
+             * @param {object} data
+             */
+            this.indexConnection = function(nodeId, data) {
+
+                if (typeof  this.CONNECTION_IDEX[nodeId] !== 'undefined') {
+
+                    this.CONNECTION_IDEX[nodeId].push(data);
+
+                } else {
+
+                    this.CONNECTION_IDEX[nodeId] = [];
+                    this.CONNECTION_IDEX[nodeId].push(data);
+
+                }
+
 
             };
 
@@ -296,7 +422,15 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
              */
             this.addGroupData = function(data) {
 
-                this.GROUPS.push(data);
+                var self = this;
+
+
+                console.log('add data', data.name);
+                self.GROUPS.push(data);
+                self.drawData();
+                self.groupAdding = null;
+
+
             }
 
         };
