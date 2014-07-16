@@ -1,5 +1,5 @@
 requirejs.config({
-    baseUrl: '/src/',
+    baseUrl: '/src',
     paths  : {
         jquery    : '../lib/jq.min',
         backbone  : '../lib/backbone.min',
