@@ -33,12 +33,15 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
             this.drawEdges = true;
             this.drawConnections = true;
 
-            this.HIDDEN_CONNECTIONS = [];
+            this.CONNECTION_COUNT = {};
 
+            this.HIDDEN_CONNECTIONS = [];
             this.GROUPS = [];
             this.LAYERS = [];
             this.NODES_INDEX = {};
             this.CONNECTION_IDEX = {};
+
+            this.statsCallback = function(){};
 
             /**
              * ----------------------------------------------------------
@@ -102,6 +105,8 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
 
                 self.drawConnectionLines();
 
+                this.statsCallback();
+
             };
 
 
@@ -113,6 +118,8 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
                 if (this.drawConnections === true) {
                     var self = this;
                     var center = this.getCanvasCenter();
+
+                    this.resetGroupConnectionsCount();
 
                     _.each(this.CONNECTION_IDEX, function(nodes, key) {
 
@@ -130,6 +137,8 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
 
                                         if (node.id !== nextNode.id && _.indexOf(connections, combinedId) === -1 && _.indexOf(connections, reversedCombiedId) === -1) {
 
+
+                                            self.groupConnectionCount(node.group.name, nextNode.group.name);
                                             self.engineConnections.ctx.strokeStyle = self.engineConnections.preCalculateColor(node.layer.color, self.connectionOpacity);
                                             self.engineConnections.ctx.lineWidth = self.connectionWidth;
                                             self.engineConnections.ctx.beginPath();
@@ -145,6 +154,58 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
                             });
                         }
                     });
+                }
+
+                console.log(this.CONNECTION_COUNT);
+            };
+
+
+            /**
+             * ----------------------------------------------------------
+             * reset connection cont for all groups if group name is provided
+             * of for all groups if no group name is provided
+             * ----------------------------------------------------------
+             * @param {String} [groupName]
+             */
+            this.resetGroupConnectionsCount = function(groupName) {
+
+                if(typeof  groupName === 'undefined' ) {
+
+                    this.CONNECTION_COUNT = {};
+
+                } else {
+
+                    this.CONNECTION_COUNT[groupName] = 0;
+
+                }
+            };
+
+            this.groupConnectionCount = function(firstGroup, secondGroup) {
+
+                this.updateGroupConnectionCount(firstGroup, secondGroup);
+                this.updateGroupConnectionCount(secondGroup, firstGroup);
+
+            };
+
+
+            this.updateGroupConnectionCount = function(groupName, targetGroup) {
+
+                if(typeof this.CONNECTION_COUNT[groupName] === 'undefined') {
+
+                    this.CONNECTION_COUNT[groupName] =  {};
+                    this.CONNECTION_COUNT[groupName][targetGroup] = 1;
+
+                } else {
+
+                    if(typeof this.CONNECTION_COUNT[groupName][targetGroup] === 'undefined') {
+
+                        this.CONNECTION_COUNT[groupName][targetGroup] = 1;
+
+                    }else{
+
+                        this.CONNECTION_COUNT[groupName][targetGroup] += 1;
+
+                    }
                 }
             };
 
@@ -165,6 +226,8 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
                 });
 
                 self.drawConnectionLines();
+
+                this.statsCallback();
 
             };
 

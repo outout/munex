@@ -1,14 +1,16 @@
-define(['munex/Munex', 'munex/MunexConsole', 'datGui'],
+define(['jquery', 'underscore', 'munex/Munex', 'munex/MunexConsole', 'datGui'],
 
 
     /**
      *
+     @param {jQuery} $
+     @param {underscore} _
      @param {Munex} Munex
      * @param {MunexConsole} MunexConsole
      * @param {Function} dat
      * @returns {{init: init}}
      */
-        function(Munex, MunexConsole) {
+        function($, _, Munex, MunexConsole) {
 
         return {
 
@@ -24,6 +26,35 @@ define(['munex/Munex', 'munex/MunexConsole', 'datGui'],
                 this.munex.hideConnectionForLayer('Layer 2');
 
                 this.munex.init(selectors);
+
+                this.statsDivContainer = $('.munexSidebar');
+
+                this.munex.statsCallback = function() {
+
+                    var groupsCountHTML =  '<strong>Connections count</strong>';
+
+
+                    _.each(self.munex.CONNECTION_COUNT, function(group, groupName){
+
+                        groupsCountHTML += '<div><strong> ' +groupName+ ' </strong></div>';
+
+                        groupsCountHTML += '<ul>';
+                        _.each(group, function(value, targetGroupName) {
+
+                            groupsCountHTML += '<li> ' +targetGroupName+ ' : ' +value+ '  </li>';
+                        });
+
+                        groupsCountHTML += '</ul>';
+                    });
+
+
+                    self.statsDivContainer.html(groupsCountHTML);
+
+                };
+
+
+
+
                 this.munex.addGroupData(
                     {
                         name : 'Group A',
@@ -127,6 +158,8 @@ define(['munex/Munex', 'munex/MunexConsole', 'datGui'],
                     ]
 
                 });
+
+
 
 
                 var gui = new dat.GUI();

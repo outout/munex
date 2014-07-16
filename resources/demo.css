@@ -4,6 +4,22 @@ body {
     background: #f1f1f1;
 }
 
+
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.clearfix {
+  *zoom: 1;
+}
+
+
 h3.hr {
     border-bottom: solid 1px #e1e1e1;
 }
@@ -49,4 +65,21 @@ input.munexConsoleInput {
 
 canvas.munexMain {
     border: solid 1px #f1f1f1;
+}
+
+
+.munexSidebar{
+    font-size: 12px;
+}
+
+
+.munexSidebar ul{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.munexSidebar ul li{
+    padding: 0;
+    margin: 0 0 0 12px;
 }
