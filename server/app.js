@@ -12,8 +12,13 @@ var express    = require('express'); // call express
 var path = require('path');
 var compress = require('compression');
 var bodyParser = require('body-parser');
+var linkRoutes = require ('./routes/link');
 
 var app        = express(); 				// define our app using express
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 // should be placed before express.static
 app.use(compress({
@@ -47,6 +52,7 @@ router.get('/', function(req, res) {
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
 app.use('/api', router);
+app.use('/link', linkRoutes());
 
 // START THE SERVER
 // =============================================================================
