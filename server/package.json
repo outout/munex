@@ -10,6 +10,8 @@
         "express": "~4.0.0",
         "compression" : "~1.1.0",
         "mongoose": "~3.6.13",
-        "ejs": "~0.8.5"
+        "ejs": "~0.8.5",
+        "request": "~2.45.0",
+        "winston" : "~0.8.1"
     }
 }

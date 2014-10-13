@@ -5,6 +5,7 @@ var express = require ('express');
 var http = require('http');
 var url = require('url');
 var request = require('request');
+var winston = require('winston');
 
 //http://rest.kegg.jp/link/<target_db>/<source_db>[/<option>]
 //http://rest.kegg.jp/link/pathway/hsa:10458/
@@ -21,6 +22,8 @@ module.exports = function () {
     router.get('/:target_db/:db_entries', function (req, res) {
         var kegg_url = ["http://rest.kegg.jp/link/", req.params.target_db, req.params.db_entries];
         kegg_url = kegg_url.join('/');
+
+        winston.log('info','getting url for', {target: req.params.target_db, entries: req.params.db_entries});
 
         req.pipe(request(kegg_url, function ( err, res, bod) {
 //                console.log(err);
