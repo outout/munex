@@ -18,12 +18,7 @@ define(['jquery', 'underscore', 'munex/Munex', 'munex/MunexConsole', 'datGui'],
                 var self = this;
                 this.munex = new Munex();
 
-                this.munex.addLayer('Layer 1', '#acacff');
-                this.munex.addLayer('Layer 2', '#ffcc00');
-                this.munex.addLayer('Layer 3', '#ff0000');
 
-                this.munex.hideConnectionForLayer('Layer 1');
-                this.munex.hideConnectionForLayer('Layer 2');
 
                 this.munex.init(selectors);
 
@@ -52,6 +47,10 @@ define(['jquery', 'underscore', 'munex/Munex', 'munex/MunexConsole', 'datGui'],
 
                 };
 
+
+                this.munex.addLayer('Layer 1', '#acacff');
+                this.munex.addLayer('Layer 2', '#ffcc00');
+                this.munex.addLayer('Layer 3', '#ff0000');
 
 
                 this.munex.addGroup('Group A');
@@ -128,7 +127,6 @@ define(['jquery', 'underscore', 'munex/Munex', 'munex/MunexConsole', 'datGui'],
                 this.munex.group('Group C').layer('Layer 3').addNode({id: 'r23', name: 'A1', parent: ['3e1']});
 
 
-                this.munex.drawData();
 
 
 
