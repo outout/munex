@@ -16,7 +16,7 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
 
             this.groupCount = 0;
             this.radius = 190;
-            this.layerGap = 80;
+            this.layerGap = 20;
             this.nodeRadius = 5;
             this.rotationOffset = 20;
             this.edgeColor = '#d1d1d1';
@@ -277,31 +277,38 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
 
                 self.NODES_INDEX[groupData.name] = {};
 
+                _.each(this.LAYERS, function(layer, index) {
+
+                    var layerName = layer.name;
+                    var layerNodes = groupData[layerName];
 
 
-                _.each(groupData.nodes, function(layerNodes, index) {
+                    if (typeof  layerNodes !== 'undefined') {
 
-                    var radius = self.radius + ((groupData.nodes.length * self.layerGap) - ((index + 1) * self.layerGap));
+                        var radius = self.radius +   (index + 1) * self.layerGap;
 
-                    var nodesInLayer = layerNodes.length;
-                    var layerAngleStep = (self.groupRadius - (self.separationDegrees * 2) ) / (nodesInLayer);
-                    var correction = (centerAngle - startAngle) / nodesInLayer;
-                    var nodeAngle = startAngle + correction;
-                    var layerName = self.LAYERS[index].name;
-                    var layerData = self.getLayerData(layerName);
-
-                    var layerCircleColor = self.engineBackground.preCalculateColor(layerData.color, self.groupCircleOpacity);
-                    self.engineBackground.arcStroke(center, radius, startAngle, endAngle, self.groupCircleWidth, layerCircleColor);
+                        console.log(index, radius);
+                        var nodesInLayer = layerNodes.length;
 
 
-                    _.each(layerNodes, function(node) {
+                        var layerAngleStep = (self.groupRadius - (self.separationDegrees * 2) ) / (nodesInLayer);
+                        var correction = (centerAngle - startAngle) / nodesInLayer;
+                        var nodeAngle = startAngle + correction;
+                        var layerData = self.getLayerData(layerName);
 
-                        self.drawNodePreparation(node, nodeAngle, center, radius, layerData, groupData);
+                        var layerCircleColor = self.engineBackground.preCalculateColor(layerData.color, self.groupCircleOpacity);
+                        self.engineBackground.arcStroke(center, radius, startAngle, endAngle, self.groupCircleWidth, layerCircleColor);
 
-                        nodeAngle += layerAngleStep;
-                    });
+
+                        _.each(layerNodes, function(node) {
+
+                            self.drawNodePreparation(node, nodeAngle, center, radius, layerData, groupData);
+
+                            nodeAngle += layerAngleStep;
+                        });
+                    }
+
                 });
-
 
                 this.startAngle += this.groupRadius;
             };
@@ -476,6 +483,100 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
              */
             this.addLayer = function(name, color) {
                 this.LAYERS.push({name: name, color: color});
+            };
+
+            this.getLayerIndex = function(layerName)  {
+
+                var layerIndex = -1;
+
+                _.each(this.LAYERS, function(layer, index) {
+
+                    if( layer.name === layerName)  {
+
+                        layerIndex = index;
+                    }
+
+                });
+
+
+                return layerIndex;
+
+            };
+
+            this.getGroupIndex = function(groupName) {
+
+                var groupIndex = -1;
+
+                _.each(this.GROUPS, function(group, index) {
+
+                    if(group.name === groupName) {
+                        groupIndex =  index;
+                    }
+
+                });
+
+
+                return groupIndex;
+
+            };
+
+
+
+            /**
+             * ----------------------------------------------------------
+             * ----------------------------------------------------------
+             * @param {String} groupName
+             */
+            this.addGroup = function(groupName){
+
+                this.GROUPS.push({
+                    name : groupName
+                });
+
+            };
+
+            /**
+             *
+             * @param groupName
+             */
+            this.group = function(groupName) {
+
+
+                this._groupName = groupName;
+                return this;
+
+            };
+
+            this.layer = function(layerName) {
+
+                this._layerName = layerName;
+
+                return this;
+            };
+
+            this.addNode = function(nodeData) {
+
+
+                var groupIndex = this.getGroupIndex(this._groupName);
+                this._addNodeData(groupIndex, this._layerName, nodeData);
+
+                this.drawData();
+
+                return this;
+
+            };
+
+            this._addNodeData = function(groupIndex, layerName, data) {
+
+                if (typeof this.GROUPS[groupIndex][layerName] === 'undefined' ) {
+
+                    this.GROUPS[groupIndex][layerName] = [];
+
+                }
+
+                this.GROUPS[groupIndex][layerName].push(data);
+
+
             };
 
             /**

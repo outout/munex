@@ -4,7 +4,7 @@ define(['core/Channel'], function(Channel) {
     /**
      * @constructor
      */
-    MunexConsole = function() {
+    var MunexConsole = function() {
 
 
         this.channel = Channel;
