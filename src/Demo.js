@@ -2,13 +2,13 @@ define(['jquery', 'underscore', 'munex/Munex', 'munex/MunexConsole', 'datGui'],
 
 
     /**
-     *
+
      @param {jQuery} $
      @param {underscore} _
      @param {Munex} Munex
-     * @param {MunexConsole} MunexConsole
-     * @param {Function} dat
-     * @returns {{init: init}}
+     @param {MunexConsole} MunexConsole
+     @param {Function} dat
+     @returns {{init: init}}
      */
         function($, _, Munex, MunexConsole) {
 
@@ -19,24 +19,23 @@ define(['jquery', 'underscore', 'munex/Munex', 'munex/MunexConsole', 'datGui'],
                 this.munex = new Munex();
 
 
-
                 this.munex.init(selectors);
 
                 this.statsDivContainer = $('.munexSidebar');
 
                 this.munex.statsCallback = function() {
 
-                    var groupsCountHTML =  '<strong>Connections count</strong>';
+                    var groupsCountHTML = '<strong>Connections count</strong>';
 
 
-                    _.each(self.munex.CONNECTION_COUNT, function(group, groupName){
+                    _.each(self.munex.CONNECTION_COUNT, function(group, groupName) {
 
-                        groupsCountHTML += '<div><strong> ' +groupName+ ' </strong></div>';
+                        groupsCountHTML += '<div><strong> ' + groupName + ' </strong></div>';
 
                         groupsCountHTML += '<ul>';
                         _.each(group, function(value, targetGroupName) {
 
-                            groupsCountHTML += '<li> ' +targetGroupName+ ' : ' +value+ '  </li>';
+                            groupsCountHTML += '<li> ' + targetGroupName + ' : ' + value + '  </li>';
                         });
 
                         groupsCountHTML += '</ul>';
@@ -52,83 +51,77 @@ define(['jquery', 'underscore', 'munex/Munex', 'munex/MunexConsole', 'datGui'],
                 this.munex.addLayer('Layer 2', '#ffcc00');
                 this.munex.addLayer('Layer 3', '#ff0000');
 
-
                 this.munex.addGroup('Group A');
                 this.munex.addGroup('Group B');
                 this.munex.addGroup('Group C');
 
-                this.munex.group('Group A').layer('Layer 1').addNode({id: 'a', name: 'a', parent: []});
-
-                this.munex.group('Group A').layer('Layer 2').addNode({id: 'a1', name: 'A1', parent: ['a']});
-                this.munex.group('Group A').layer('Layer 2').addNode({id: 'b1', name: 'B1', parent: ['a']});
-                this.munex.group('Group A').layer('Layer 2').addNode({id: 'c1', name: 'C1', parent: ['a']});
-                this.munex.group('Group A').layer('Layer 2').addNode({id: 'd1', name: 'D1', parent: ['a']});
-                this.munex.group('Group A').layer('Layer 2').addNode({id: 'e1', name: 'E1', parent: ['a']});
-
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'a2', name: 'A1', parent: ['a1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'b2', name: 'A1', parent: ['a1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'c2', name: 'A1', parent: ['a1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'd2', name: 'A1', parent: ['a1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'e2', name: 'A1', parent: ['b1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'f2', name: 'A1', parent: ['b1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'g2', name: 'A1', parent: ['b1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'h2', name: 'A1', parent: ['b1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'i2', name: 'A1', parent: ['c1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'j2', name: 'A1', parent: ['c1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'k2', name: 'A1', parent: ['c1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'l2', name: 'A1', parent: ['c1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'm2', name: 'A1', parent: ['d1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'n2', name: 'A1', parent: ['d1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'o2', name: 'A1', parent: ['d1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'p2', name: 'A1', parent: ['e1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'q2', name: 'A1', parent: ['e1']});
-                this.munex.group('Group A').layer('Layer 3').addNode({id: 'r2', name: 'A1', parent: ['e1']});
-
-
-
-                this.munex.group('Group B').layer('Layer 1').addNode({id: 'a', name: 'a', parent: []} );
-
-                this.munex.group('Group B').layer('Layer 2').addNode({id: 'a1', name: 'A1', parent: ['a']});
-                this.munex.group('Group B').layer('Layer 2').addNode({id: 'b1', name: 'B1', parent: ['a']});
-                this.munex.group('Group B').layer('Layer 2').addNode({id: 'c1', name: 'C1', parent: ['a']});
-                this.munex.group('Group B').layer('Layer 2').addNode({id: 'd1', name: 'D1', parent: ['a']});
-                this.munex.group('Group B').layer('Layer 2').addNode({id: 'e1', name: 'E1', parent: ['a']});
-
-                this.munex.group('Group B').layer('Layer 3').addNode({id: 'a2', name: 'A1', parent: ['a1']});
-                this.munex.group('Group B').layer('Layer 3').addNode({id: 'b2', name: 'A1', parent: ['a1']});
-                this.munex.group('Group B').layer('Layer 3').addNode({id: 'd2', name: 'A1', parent: ['a1']});
-                this.munex.group('Group B').layer('Layer 3').addNode({id: 'e2', name: 'A1', parent: ['b1']});
-                this.munex.group('Group B').layer('Layer 3').addNode({id: 'h2', name: 'A1', parent: ['b1']});
-                this.munex.group('Group B').layer('Layer 3').addNode({id: 'i22', name: 'A1', parent: ['c1']});
-                this.munex.group('Group B').layer('Layer 3').addNode({id: 'l22', name: 'A1', parent: ['c1']});
-                this.munex.group('Group B').layer('Layer 3').addNode({id: 'm22', name: 'A1', parent: ['d1']});
-                this.munex.group('Group B').layer('Layer 3').addNode({id: 'o22', name: 'A1', parent: ['d1']});
-                this.munex.group('Group B').layer('Layer 3').addNode({id: 'p22', name: 'A1', parent: ['e1']});
-                this.munex.group('Group B').layer('Layer 3').addNode({id: 'r22', name: 'A1', parent: ['e1']});
+                //Group A
+                this.munex.select('Group A>Layer 1').addNode({id: 'a', name: 'a', parent: []});
+                //----------------------------------------------------------
+                this.munex.select('Group A>Layer 2').addNode({id: 'a1', name: 'A1', parent: ['a']});
+                this.munex.select('Group A>Layer 2').addNode({id: 'b1', name: 'B1', parent: ['a']});
+                this.munex.select('Group A>Layer 2').addNode({id: 'c1', name: 'C1', parent: ['a']});
+                this.munex.select('Group A>Layer 2').addNode({id: 'd1', name: 'D1', parent: ['a']});
+                this.munex.select('Group A>Layer 2').addNode({id: 'e1', name: 'E1', parent: ['a']});
+                //----------------------------------------------------------
+                this.munex.select('Group A>Layer 3').addNode({id: 'a2', name: 'A1', parent: ['a1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'b2', name: 'A1', parent: ['a1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'c2', name: 'A1', parent: ['a1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'd2', name: 'A1', parent: ['a1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'e2', name: 'A1', parent: ['b1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'f2', name: 'A1', parent: ['b1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'g2', name: 'A1', parent: ['b1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'h2', name: 'A1', parent: ['b1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'i2', name: 'A1', parent: ['c1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'j2', name: 'A1', parent: ['c1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'k2', name: 'A1', parent: ['c1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'l2', name: 'A1', parent: ['c1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'm2', name: 'A1', parent: ['d1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'n2', name: 'A1', parent: ['d1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'o2', name: 'A1', parent: ['d1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'p2', name: 'A1', parent: ['e1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'q2', name: 'A1', parent: ['e1']});
+                this.munex.select('Group A>Layer 3').addNode({id: 'r2', name: 'A1', parent: ['e1']});
 
 
+                //Group B
+                this.munex.select('Group B>Layer 1').addNode({id: 'a', name: 'a', parent: []});
+                //----------------------------------------------------------
+                this.munex.select('Group B>Layer 2').addNode({id: 'a1', name: 'A1', parent: ['a']});
+                this.munex.select('Group B>Layer 2').addNode({id: 'b1', name: 'B1', parent: ['a']});
+                this.munex.select('Group B>Layer 2').addNode({id: 'c1', name: 'C1', parent: ['a']});
+                this.munex.select('Group B>Layer 2').addNode({id: 'd1', name: 'D1', parent: ['a']});
+                this.munex.select('Group B>Layer 2').addNode({id: 'e1', name: 'E1', parent: ['a']});
+                //----------------------------------------------------------
+                this.munex.select('Group B>Layer 3').addNode({id: 'a2', name: 'A1', parent: ['a1']});
+                this.munex.select('Group B>Layer 3').addNode({id: 'b2', name: 'A1', parent: ['a1']});
+                this.munex.select('Group B>Layer 3').addNode({id: 'd2', name: 'A1', parent: ['a1']});
+                this.munex.select('Group B>Layer 3').addNode({id: 'e2', name: 'A1', parent: ['b1']});
+                this.munex.select('Group B>Layer 3').addNode({id: 'h2', name: 'A1', parent: ['b1']});
+                this.munex.select('Group B>Layer 3').addNode({id: 'i22', name: 'A1', parent: ['c1']});
+                this.munex.select('Group B>Layer 3').addNode({id: 'l22', name: 'A1', parent: ['c1']});
+                this.munex.select('Group B>Layer 3').addNode({id: 'm22', name: 'A1', parent: ['d1']});
+                this.munex.select('Group B>Layer 3').addNode({id: 'o22', name: 'A1', parent: ['d1']});
+                this.munex.select('Group B>Layer 3').addNode({id: 'p22', name: 'A1', parent: ['e1']});
+                this.munex.select('Group B>Layer 3').addNode({id: 'r22', name: 'A1', parent: ['e1']});
 
 
-
-                this.munex.group('Group C').layer('Layer 1').addNode({id: '3b', name: 'a', parent: []});
-                this.munex.group('Group C').layer('Layer 1').addNode({id: '3a', name: 'a', parent: []});
-
-                this.munex.group('Group C').layer('Layer 2').addNode({id: '3a1', name: 'A1', parent: ['3a']});
-                this.munex.group('Group C').layer('Layer 2').addNode({id: '3b1', name: 'B1', parent: ['3a', '3b']});
-                this.munex.group('Group C').layer('Layer 2').addNode({id: 'd1', name: 'D1', parent: ['3a']});
-                this.munex.group('Group C').layer('Layer 2').addNode({id: '3e1', name: 'E1', parent: ['3a']});
-
-                this.munex.group('Group C').layer('Layer 3').addNode({id: 'a2', name: 'A1', parent: ['3a1']});
-                this.munex.group('Group C').layer('Layer 3').addNode({id: 'b2', name: 'A1', parent: ['3a1']});
-                this.munex.group('Group C').layer('Layer 3').addNode({id: 'd23', name: 'A1', parent: ['3a1']});
-                this.munex.group('Group C').layer('Layer 3').addNode({id: 'm23', name: 'A1', parent: ['d1']});
-                this.munex.group('Group C').layer('Layer 3').addNode({id: 'o23', name: 'A1', parent: ['d1']});
-                this.munex.group('Group C').layer('Layer 3').addNode({id: 'p23', name: 'A1', parent: ['3e1']});
-                this.munex.group('Group C').layer('Layer 3').addNode({id: 'r23', name: 'A1', parent: ['3e1']});
-
-
-
-
+                //Group C
+                this.munex.select('Group C>Layer 1').addNode({id: '3b', name: 'a', parent: []});
+                this.munex.select('Group C>Layer 1').addNode({id: '3a', name: 'a', parent: []});
+                //----------------------------------------------------------
+                this.munex.select('Group C>Layer 2').addNode({id: '3a1', name: 'A1', parent: ['3a']});
+                this.munex.select('Group C>Layer 2').addNode({id: '3b1', name: 'B1', parent: ['3a', '3b']});
+                this.munex.select('Group C>Layer 2').addNode({id: 'd1', name: 'D1', parent: ['3a']});
+                this.munex.select('Group C>Layer 2').addNode({id: '3e1', name: 'E1', parent: ['3a']});
+                //----------------------------------------------------------
+                this.munex.select('Group C>Layer 3').addNode({id: 'a2', name: 'A1', parent: ['3a1']});
+                this.munex.select('Group C>Layer 3').addNode({id: 'b2', name: 'A1', parent: ['3a1']});
+                this.munex.select('Group C>Layer 3').addNode({id: 'd23', name: 'A1', parent: ['3a1']});
+                this.munex.select('Group C>Layer 3').addNode({id: 'm23', name: 'A1', parent: ['d1']});
+                this.munex.select('Group C>Layer 3').addNode({id: 'o23', name: 'A1', parent: ['d1']});
+                this.munex.select('Group C>Layer 3').addNode({id: 'p23', name: 'A1', parent: ['3e1']});
+                this.munex.select('Group C>Layer 3').addNode({id: 'r23', name: 'A1', parent: ['3e1']});
 
 
                 var gui = new dat.GUI();

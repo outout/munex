@@ -285,7 +285,7 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
 
                     if (typeof  layerNodes !== 'undefined') {
 
-                        var radius = self.radius +   (index + 1) * self.layerGap;
+                        var radius = self.radius +   (self.LAYERS.length - (index + 1)) * self.layerGap;
 
                         console.log(index, radius);
                         var nodesInLayer = layerNodes.length;
@@ -550,6 +550,20 @@ define(['jquery', 'underscore', '../gfx/CanvasLib', 'core/Channel'],
             this.layer = function(layerName) {
 
                 this._layerName = layerName;
+
+                return this;
+            };
+
+            /**
+             *
+             * @param {String} selector
+             */
+            this.select = function(selector) {
+
+                var parts = selector.split('>');
+
+                this.group(parts[0]);
+                this.layer(parts[1]);
 
                 return this;
             };
